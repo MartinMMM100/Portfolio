@@ -1,0 +1,33 @@
+
+body{
+    font-family: Arial, sans-serif;
+    text-align: center;
+    align-items: center;
+    background-color: hsl(0, 0%, 13%);
+    color: white;
+}
+header{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+header nav{
+    display: flex;
+    justify-content: flex-end;
+    padding: 10px;
+    gap: 40px;
+}
+
+header nav button{
+    padding: 10px 20px;
+    background-color: #007BFF;
+    color: white;
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+    
+}
+header nav button:hover{
+    background-color: #0056b3;
+}
