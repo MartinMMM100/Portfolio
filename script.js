@@ -1,7 +1,7 @@
 function showSection(id, btn) {
     document.querySelectorAll('main section').forEach(s => s.classList.remove('active'));
-    document.getElementById(id).classList.add('active');
-    
+    document.getElementById(id).classList.add('active');      
+
     document.querySelectorAll('nav button').forEach(b => b.classList.remove('active'));
     btn.classList.add('active');
 }

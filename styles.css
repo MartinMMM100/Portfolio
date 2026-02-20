@@ -436,19 +436,6 @@ main { padding: 0 60px; position: relative; z-index: 1; }
     color: var(--text);
 }
 
-.contact-arrow {
-    color: var(--muted);
-    opacity: 0;
-    transform: translateX(-6px);
-    transition: all 0.25s ease;
-}
-
-.contact-card:hover .contact-arrow {
-    opacity: 1;
-    transform: translateX(0);
-    color: var(--accent);
-}
-
 /* ══ SECTION VISIBILITY ══ */
 main section { display: none; }
 main section.active { display: block; }
