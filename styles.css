@@ -129,7 +129,7 @@ main { padding: 0 60px; position: relative; z-index: 1; }
 .section-block:last-child { padding-bottom: 80px; }
 
 /* ══ HOME ══ */
-#home.active                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                   {
+#home.active {
     display: flex;
     align-items: center;
     justify-content: space-between;
@@ -255,12 +255,70 @@ main { padding: 0 60px; position: relative; z-index: 1; }
     background: hsla(211, 100%, 55%, 0.07);
 }
 
-/* ══ PROJECTS ══ */
-.projects-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-    gap: 24px;
+/* ══ PROJECTS — HORIZONTAL SCROLL ══ */
+.projects-scroll-wrapper {
+    position: relative;
 }
+
+/* Fade-out edges to hint at more content */
+.projects-scroll-wrapper::before,
+.projects-scroll-wrapper::after {
+    content: '';
+    position: absolute;
+    top: 0; bottom: 0;
+    width: 60px;
+    pointer-events: none;
+    z-index: 2;
+    transition: opacity 0.3s ease;
+}
+.projects-scroll-wrapper::before {
+    left: 0;
+    background: linear-gradient(to right, var(--bg), transparent);
+}
+.projects-scroll-wrapper::after {
+    right: 0;
+    background: linear-gradient(to left, var(--bg), transparent);
+}
+
+.projects-grid {
+    display: flex;
+    flex-direction: row;
+    gap: 24px;
+    overflow-x: auto;
+    overflow-y: visible;
+    padding: 8px 4px 24px;
+    scroll-snap-type: x mandatory;
+    -webkit-overflow-scrolling: touch;
+    cursor: grab;
+    scroll-behavior: auto;
+    /* Show exactly 3 cards at a time */
+    --card-width: calc((100%) / 3 - 16px);
+    scrollbar-width: thin;
+    scrollbar-color: hsla(211, 100%, 55%, 0.3) transparent;
+}
+
+.projects-grid.is-dragging {
+    scroll-snap-type: none;
+}
+
+.projects-grid:active {
+    cursor: grabbing;
+}
+
+.projects-grid::-webkit-scrollbar {
+    height: 4px;
+}
+.projects-grid::-webkit-scrollbar-track {
+    background: transparent;
+}
+.projects-grid::-webkit-scrollbar-thumb {
+    background: hsla(211, 100%, 55%, 0.3);
+    border-radius: 100px;
+}
+.projects-grid::-webkit-scrollbar-thumb:hover {
+    background: hsla(211, 100%, 55%, 0.6);
+}
+
 .project-card {
     background: var(--surface);
     border: 1px solid var(--border);
@@ -268,11 +326,56 @@ main { padding: 0 60px; position: relative; z-index: 1; }
     overflow: hidden;
     display: flex; flex-direction: column;
     transition: border-color 0.3s ease, transform 0.3s ease, box-shadow 0.3s ease;
+    /* Exactly 3 cards fill the viewport width */
+    flex: 0 0 var(--card-width);
+    scroll-snap-align: start;
+    min-width: 240px;
 }
 .project-card:hover {
     border-color: hsla(211, 100%, 55%, 0.35);
     transform: translateY(-5px);
     box-shadow: 0 20px 50px rgba(0,0,0,0.4);
+}
+
+/* Prevent native image drag and text selection while scrolling */
+.projects-grid img {
+    -webkit-user-drag: none;
+    user-drag: none;
+    pointer-events: none;
+}
+.projects-grid .project-title,
+.projects-grid .project-desc,
+.projects-grid .tech-tag,
+.projects-grid .skill-cat-title {
+    pointer-events: none;
+}
+/* Re-enable pointer events on interactive elements */
+.projects-grid .project-links {
+    pointer-events: auto;
+}
+.projects-grid:active img,
+.projects-grid:active .project-title,
+.projects-grid:active .project-desc {
+    user-select: none;
+    -webkit-user-select: none;
+}
+.projects-scroll-hint {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 16px;
+    color: var(--muted);
+    font-size: 0.78rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+}
+.projects-scroll-hint svg {
+    opacity: 0.6;
+    animation: nudge 2s ease-in-out infinite;
+}
+@keyframes nudge {
+    0%, 100% { transform: translateX(0); }
+    50% { transform: translateX(6px); }
 }
 
 /* Preview image area */
@@ -444,7 +547,7 @@ main section.active { display: block; }
 /* ══ RESPONSIVE ══ */
 @media (max-width: 900px) {
     .skills-grid { grid-template-columns: 1fr 1fr; }
-    .projects-grid { grid-template-columns: 1fr; }
+    .projects-grid { --card-width: calc(50% - 12px); }
 }
 
 @media (max-width: 768px) {
@@ -460,4 +563,6 @@ main section.active { display: block; }
 
     .skills-grid { grid-template-columns: 1fr; }
     .section-block { padding-top: 52px; }
+
+    .projects-grid { --card-width: 260px; }
 }
