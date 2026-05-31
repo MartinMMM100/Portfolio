@@ -340,7 +340,6 @@ main { padding: 0 60px; position: relative; z-index: 1; }
 /* Prevent native image drag and text selection while scrolling */
 .projects-grid img {
     -webkit-user-drag: none;
-    user-drag: none;
     pointer-events: none;
 }
 .projects-grid .project-title,
